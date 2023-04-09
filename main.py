@@ -9,12 +9,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('--phase', type=str, default='train', help='[train / test]')
     parser.add_argument('--light', type=str2bool, default=False, help='[U-GAT-IT full version / U-GAT-IT light version]')
-    parser.add_argument('--dataset', type=str, default='YOUR_DATASET_NAME', help='dataset_name')
+    parser.add_argument('--dataset', type=str, default='selfie2anime', help='dataset_name')
 
-    parser.add_argument('--iteration', type=int, default=1000000, help='The number of training iterations')
+    parser.add_argument('--iteration', type=int, default=10000, help='The number of training iterations')
     parser.add_argument('--batch_size', type=int, default=1, help='The size of batch size')
-    parser.add_argument('--print_freq', type=int, default=1000, help='The number of image print freq')
-    parser.add_argument('--save_freq', type=int, default=100000, help='The number of model save freq')
+    parser.add_argument('--print_freq', type=int, default=100, help='The number of image print freq')
+    parser.add_argument('--save_freq', type=int, default=1000, help='The number of model save freq')
     parser.add_argument('--decay_flag', type=str2bool, default=True, help='The decay_flag')
 
     parser.add_argument('--lr', type=float, default=0.0001, help='The learning rate')
@@ -32,7 +32,7 @@ def parse_args():
     parser.add_argument('--img_ch', type=int, default=3, help='The size of image channel')
 
     parser.add_argument('--result_dir', type=str, default='results', help='Directory name to save the results')
-    parser.add_argument('--device', type=str, default='cuda', choices=['cpu', 'cuda'], help='Set gpu mode; [cpu, cuda]')
+    parser.add_argument('--device', type=str, default='mps', choices=['mps', 'cpu', 'cuda'], help='Set gpu mode; [cpu, cuda]')
     parser.add_argument('--benchmark_flag', type=str2bool, default=False)
     parser.add_argument('--resume', type=str2bool, default=False)
 
@@ -79,5 +79,7 @@ def main():
         gan.test()
         print(" [*] Test finished!")
 
+
 if __name__ == '__main__':
+    main()
     main()

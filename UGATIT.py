@@ -149,18 +149,21 @@ class UGATIT(object) :
                 self.G_optim.param_groups[0]['lr'] -= (self.lr / (self.iteration // 2))
                 self.D_optim.param_groups[0]['lr'] -= (self.lr / (self.iteration // 2))
 
-            try:
-                real_A, _ = trainA_iter.next()
-            except:
-                trainA_iter = iter(self.trainA_loader)
-                real_A, _ = trainA_iter.next()
+            # try:
+            #     real_A, _ = trainA_iter.next()
+            # except:
+            #     trainA_iter = iter(self.trainA_loader)
+            #     real_A, _ = trainA_iter.next()
+            #
+            # try:
+            #     real_B, _ = trainB_iter.next()
+            # except:
+            #     trainB_iter = iter(self.trainB_loader)
+            #     real_B, _ = trainB_iter.next()
 
-            try:
-                real_B, _ = trainB_iter.next()
-            except:
-                trainB_iter = iter(self.trainB_loader)
-                real_B, _ = trainB_iter.next()
 
+            real_A, _ = next(iter(self.trainA_loader))
+            real_B, _ = next(iter(self.trainB_loader))
             real_A, real_B = real_A.to(self.device), real_B.to(self.device)
 
             # Update D
@@ -240,8 +243,9 @@ class UGATIT(object) :
             # clip parameter of AdaILN and ILN, applied after optimizer step
             self.genA2B.apply(self.Rho_clipper)
             self.genB2A.apply(self.Rho_clipper)
-
-            print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
+            end_time = time.time()
+            print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, end_time - start_time, Discriminator_loss, Generator_loss))
+            start_time = end_time
             if step % self.print_freq == 0:
                 train_sample_num = 5
                 test_sample_num = 5
@@ -249,18 +253,10 @@ class UGATIT(object) :
                 B2A = np.zeros((self.img_size * 7, 0, 3))
 
                 self.genA2B.eval(), self.genB2A.eval(), self.disGA.eval(), self.disGB.eval(), self.disLA.eval(), self.disLB.eval()
-                for _ in range(train_sample_num):
-                    try:
-                        real_A, _ = trainA_iter.next()
-                    except:
-                        trainA_iter = iter(self.trainA_loader)
-                        real_A, _ = trainA_iter.next()
 
-                    try:
-                        real_B, _ = trainB_iter.next()
-                    except:
-                        trainB_iter = iter(self.trainB_loader)
-                        real_B, _ = trainB_iter.next()
+                for _ in range(train_sample_num):
+                    real_A, _ = next(iter(self.trainA_loader))
+                    real_B, _ = next(iter(self.trainB_loader))
                     real_A, real_B = real_A.to(self.device), real_B.to(self.device)
 
                     fake_A2B, _, fake_A2B_heatmap = self.genA2B(real_A)
@@ -289,17 +285,8 @@ class UGATIT(object) :
                                                                RGB2BGR(tensor2numpy(denorm(fake_B2A2B[0])))), 0)), 1)
 
                 for _ in range(test_sample_num):
-                    try:
-                        real_A, _ = testA_iter.next()
-                    except:
-                        testA_iter = iter(self.testA_loader)
-                        real_A, _ = testA_iter.next()
-
-                    try:
-                        real_B, _ = testB_iter.next()
-                    except:
-                        testB_iter = iter(self.testB_loader)
-                        real_B, _ = testB_iter.next()
+                    real_A, _ = next(iter(self.trainA_loader))
+                    real_B, _ = next(iter(self.trainB_loader))
                     real_A, real_B = real_A.to(self.device), real_B.to(self.device)
 
                     fake_A2B, _, fake_A2B_heatmap = self.genA2B(real_A)
