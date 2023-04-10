@@ -14,10 +14,10 @@ def parse_args():
     parser.add_argument('--iteration', type=int, default=10000, help='The number of training iterations')
     parser.add_argument('--batch_size', type=int, default=1, help='The size of batch size')
     parser.add_argument('--print_freq', type=int, default=100, help='The number of image print freq')
-    parser.add_argument('--save_freq', type=int, default=1000, help='The number of model save freq')
+    parser.add_argument('--save_freq', type=int, default=100, help='The number of model save freq')
     parser.add_argument('--decay_flag', type=str2bool, default=True, help='The decay_flag')
 
-    parser.add_argument('--lr', type=float, default=0.0001, help='The learning rate')
+    parser.add_argument('--lr', type=float, default=0.001, help='The learning rate')
     parser.add_argument('--weight_decay', type=float, default=0.0001, help='The weight decay')
     parser.add_argument('--adv_weight', type=int, default=1, help='Weight for GAN')
     parser.add_argument('--cycle_weight', type=int, default=10, help='Weight for Cycle')
@@ -82,4 +82,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    main()
+#     main()

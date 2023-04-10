@@ -1,4 +1,4 @@
-import time, itertools
+import time, itertools, datetime
 from dataset import ImageFolder
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -244,7 +244,9 @@ class UGATIT(object) :
             self.genA2B.apply(self.Rho_clipper)
             self.genB2A.apply(self.Rho_clipper)
             end_time = time.time()
-            print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, end_time - start_time, Discriminator_loss, Generator_loss))
+            now = datetime.datetime.now()
+            # print(end_time)
+            print("[%5d/%5d] %s time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, now.time(), end_time - start_time, Discriminator_loss, Generator_loss))
             start_time = end_time
             if step % self.print_freq == 0:
                 train_sample_num = 5
